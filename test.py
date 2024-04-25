@@ -1,22 +1,43 @@
-input('Если готов играть, нажми Entr')
-slova=('сосиска',
-       'крокодил',
-       'медведь',
-       'завтрак',
-       'компьютер')
-import random
-slovo=random.choice(slova)
-print('В этом слове', len(slovo),'букв')
-print('Теперь ты можешь 5 раз спросить меня, есть ли какая-то буква в этом слове?\n')
-for _ in range (5):
-    bukva=input('Напиши букву, которую хочешь проверить?')
-    if bukva in slovo:
-        print('Да')
+# Рекорды
+# Демонстрирует списочные методы
+scores = []
+choice = None
+while choice != 0:
+    print(
+        """
+Рекорды
+0 - Выйти
+1 - Показать рекорды
+2 - Добавить рекорды
+3 - Удалить рекорды
+4 - Сортировать список
+"""
+    )
+choice = int(input('Ваш выбор: '))
+print()
+# выход
+if choice == 0:
+    print('До свидане.')
+# вывод лучших результатов на экран циклом for
+elif choice == 1:
+    print('Рекорды\n')
+    for score in scores:
+        print(score)
+# добавляем рекорда методом append()
+elif choice == 2:
+    score = int(input('Впишите свой результат: '))
+    scores.append(score)
+# удаление рекорда методом remove()
+elif choice == 3:
+    score = int(input('Какой из рекордов удалить?: '))
+    if score in scores:
+        scores.remove(score)
     else:
-        print('Нет')
-otgadka=input('Какое слово было загадано?\n')
-if otgadka==slovo:
-    print('Ура, ты угадал!')
+        print(f'Результат {score} не содержится в списке рекордов.')
+# сортировка рекордов методом sort()
+elif choice == 4:
+    scores.sort(reverse=True)
+# непонятный пользовательский ввод
 else:
-    print('Нет, попробуй в другой раз')
-input='Для выхода нажмите Entr'
+    print('Извините, в меню нет пнкта', choice)
+input('\nНажмите Enter, чтобы выйти\n')
