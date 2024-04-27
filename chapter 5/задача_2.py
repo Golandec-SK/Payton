@@ -1,53 +1,50 @@
 
-submenu = ("""
-    Меню распределение очков'
-    '0 - Вернуться'
-    '1 - Распределить очки',
-    '2 - Обнулить распределение'
-""")
-parameters = (
-    'Сила',
-    'Здоровье',
-    'Мудрость',
-    'Ловкость'
-)
+parameters = {
+    'Сила': 0,
+    'Здоровье': 0,
+    'Мудрость': 0,
+    'Ловкость': 0
+}
 points = 30
 choice = None
-parameter = {}
+
 while choice != 0:
     print("""
             Меню характеристик
-    
+
     0 - Выход
     1 - Показать характеристики
-    2 - Управление характеристиками
+    2 - Распределить очки навык
+    3 - Обнулить распределение
 """)
     choice = int(input('\nВаш выбор: '))
     print()
     if choice == 0:
         print('До свидане.')
     elif choice == 1:
-        while points > 0 and choice != 0:
-            print("""
-            Меню распределение очков
-    0 - Вернуться
-    1 - Распределить очки
-    2 - Обнулить распределение
-""")
-            choice = int(input('Ваш выбор: '))
-            print('\n')
-            if choice == 0:
-                print()
-            elif choice == 2:
-                skill = input('\nВведите навык: ')
-                point = int(input('Сколько очков вы хотите потратить?: '))
-                result = {skill: point}
-                parameter.append(result)
-                parameter.sort(reverse=True)
-                parameter = parameter[:5]
-                points -= point
-            elif choice == 1:
-                print('Навак\tОчки')
-                for result in parameter:
-                    skill, point = result
-                    print(skill, '\t',)
+        for key, value in parameters.items():
+            print(f'{key} -- {value}')
+        input('\nНажмите Enter, чтобы продолжить\n')
+    elif choice == 2:
+        print('\n\tХарактеристики.\n')
+        for i in parameters:
+            print(i)
+        skill = input('\nВведите навык: ')
+        skill = skill.capitalize()
+        if skill in parameters:
+            point = int(input('Сколько очков вы хотите потратить?: '))
+            parameters[skill] = point
+            print(f'Вы добавили {point} очков в навак: {skill}')
+            points -= point
+            print(f'\nУ вас осталось {points} очка(ов)')
+        else:
+            print('Некорректный ввод! Попробуйте еще раз.')
+        input('\nНажмите Enter, чтобы продолжить\n')
+    elif choice == 3:
+        parameters[skill] = 0
+        print('Ваши навыки сброшены.')
+        input('\nНажмите Enter, чтобы продолжить\n')
+    else:
+        print('Извините, в меню нет пнкта', choice)
+
+input('\nНажмите Enter, чтобы выйти\n')

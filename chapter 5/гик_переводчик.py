@@ -45,7 +45,7 @@ while choice != 0:
             geek[term] = definition
             print(f'\nТерминv - {term}, добавлен в словарь')
         else:
-            print('\nТакой термин уже есть! Попробуйте изменить его толкование')
+            print('\nТакой термин уже есть!')
 # Новое толкование известного термина
     elif choice == 3:
         for key in geek.keys():
