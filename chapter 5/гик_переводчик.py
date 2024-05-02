@@ -7,8 +7,9 @@ geek = {'404': 'Не знать, не владеть информацией. 404
         'Percussive Maintence': 'Ситуация, когда бьют неисправный технику',
         'Uninstalled': 'Об увольнении кого-либо'
         }
-scores = []
+
 choice = None
+
 while choice != 0:
     print(
         """
@@ -61,7 +62,7 @@ while choice != 0:
     elif choice == 4:
         for key in geek.keys():
             print(key)
-        term = input('\nКакой термин вы хотите удалить?: ')
+        
         if term in geek:
             del geek[term]
             print(f'Термин - {term}, удален.')
