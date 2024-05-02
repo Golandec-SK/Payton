@@ -62,7 +62,6 @@ while choice != 0:
     elif choice == 4:
         for key in geek.keys():
             print(key)
-        
         if term in geek:
             del geek[term]
             print(f'Термин - {term}, удален.')
