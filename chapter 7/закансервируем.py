@@ -37,3 +37,5 @@ print('торговые марки -', s['brand'])
 print('формы - ', s['shape'])
 print('вид овощей -', s['variety'])
 s.close
+
+input('\nНажмите Enter, что бы выйти.\n')
