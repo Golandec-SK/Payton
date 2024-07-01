@@ -1,48 +1,121 @@
-# Read It
-# Demonstrates reading from a text file
+# Chapter 7, Challenge 3
+# Trivia game that reads a plain text file
 
-print("Opening and closing the file.")
-text_file = open("read_it.txt", "r")
-text_file.close()
+import sys
 
-print("\nReading characters from the file.")
-text_file = open("read_it.txt", "r")
-print(text_file.read(1))
-print(text_file.read(5))
-text_file.close()
+def open_file(file_name, mode):
+    """Open a file."""
+    try:
+        the_file = open(file_name, mode)
+    except IOError as e:
+        print("Unable to open the file", file_name, "Ending program.\n", e)
+        input("\n\nPress the enter key to exit.")
+        sys.exit()
+    else:
+        return the_file
 
-print("\nReading the entire file at once.")
-text_file = open("read_it.txt", "r")
-whole_thing = text_file.read()
-print(whole_thing)
-text_file.close()
+def next_line(the_file):
+    """Return next line from the trivia file, formatted."""
+    line = the_file.readline()
+    line = line.replace("/", "\n")
+    return line
 
-print("\nReading characters from a line.")
-text_file = open("read_it.txt", "r")
-print(text_file.readline(1))
-print(text_file.readline(5))
-text_file.close()
+def next_block(the_file):
+    """Return the next block of data from the trivia file."""
 
-print("\nReading one line at a time.")
-text_file = open("read_it.txt", "r")
-print(text_file.readline())
-print(text_file.readline())
-print(text_file.readline())
-text_file.close()
+    category = next_line(the_file)
 
-print("\nReading the entire file into a list.")
-text_file = open("read_it.txt", "r")
-lines = text_file.readlines()
-print(lines)
-print(len(lines))
-for line in lines:
-    print(line)
-text_file.close()
+    question = next_line(the_file)
 
-print("\nLooping through the files, line by line.")
-text_file = open("read_it.txt", "r")
-for line in text_file:
-    print(line)
-text_file.close()
+    answers = []
+    for i in range(4):
+        answers.append(next_line(the_file))
 
-input("\n\nPress the enter key to exit.")
+    points = next_line(the_file)
+    
+    correct = next_line(the_file)
+    if correct:
+        correct = correct[0]
+
+    explanation = next_line(the_file)
+
+    return category, question, answers, points, correct, explanation
+
+def welcome(title):
+    """Welcome the player"""
+    print("Welcome to the game")
+    print("The title of this session is:", title)
+
+def high_scores(score):
+    """Record's player's name and score if the score is high enough"""    
+    high_score = open_file("trivia.txt", "r+")
+    high_scores = []
+    name = None
+    win = score
+    for i in range(5):
+        score = high_score.readline()
+        score = score.replace("\n","")
+        name = high_score.readline()
+        name = name.replace("\n","")
+        score = int(score)
+        high_scores.append((score, name))
+    high_score.close()
+    high_scores.sort()
+    for scores in high_scores:
+        scores = (score, name)
+        if win > int(score): # only if got a high score does the score get entered
+            name = input("You've got a high score! What's your name? ")
+            print("Well done ", name, "! Your score is: ", win, "!", sep = "")
+            high_scores.append((win, name))
+            high_scores.pop(0)
+            high_scores.sort(reverse = True) # ensure highscores in correct order
+            high_score = open_file("trivia.txt", "w")
+            for scores in high_scores:
+                (score, name) = scores
+                score = str(score)
+                high_score.write(score)
+                high_score.write('\n')
+                high_score.writelines(name)
+                high_score.write('\n')
+            break
+        else:
+            print("Sorry, you didn't get a high score, better luck next time!")
+    high_score.close()
+
+def main():
+    trivia_file = open_file("trivia.txt", "r")
+    title = next_line(trivia_file)
+    welcome(title)
+    score = 0
+
+    # get the first block
+    category, question, answers, points, correct, explanation = next_block(trivia_file)
+    while category:
+        # ask a question
+        print(category)
+        print(question)
+        for i in range(4):
+            print("\t", i + 1, "-", answers[i])
+        # get an answer
+        answer = input("What's your answer?: ")
+        # check answer
+        if answer == correct:
+            print("\nRight!", end=" ")
+            points = int(points)
+            score += points
+        else:
+            print("\nWrong.", end=" ")
+        print(explanation)
+        print("Score:", score, "\n\n")
+    
+
+        # get next block
+        category, question, answers, points, correct, explanation = next_block(trivia_file)
+
+    high_scores(score)
+    trivia_file.close()
+
+    print("That was the last question!")
+    print("You're final score is", score)
+
+main()
